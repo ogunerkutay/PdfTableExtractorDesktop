@@ -37,7 +37,7 @@ To bring up the settings menu, start the desktop icon normally.
 ## Updating
 
 1. When a new version is available, a message will appear in the console saying that the local version is out of date.
-2. Go to the **Releases** section.
+2. Go to the [**Releases**](https://github.com/ogunerkutay/PdfTableExtractorDesktop/releases) section.
 3. Download the new installer.
 4. Uninstall the old version.
 5. Install the new version.
