@@ -2,6 +2,13 @@
 
 This repository contains a C# port of the original [**PDFTableExtractor**](https://github.com/Degubi/PDFTableExtractor) with the developer's permission. The application extracts tables from PDF files and converts them into Excel (XLSX) format.
 
+## Features:
+- **Parallel extraction**: Process multiple PDFs at once.
+- **Customizable settings**: Configure how the app works.
+- **Version checking**: Keeps track of the latest version on GitHub.
+- **User interface**: Easily configure settings through the app’s interface.
+- **Error handling**: Logs any errors in an `error.txt` file for troubleshooting.
+
 ## Downloading & Installing
 
 1. Go to the **Releases** section and download the latest installer file.
