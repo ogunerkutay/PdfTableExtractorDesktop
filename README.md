@@ -1,6 +1,6 @@
 # PDF Table Extractor Desktop
 
-This repository contains a C# port of the original PDFTableExtractor with the developer's permission. The application extracts tables from PDF files and converts them into Excel (XLSX) format.
+This repository contains a C# port of the original [**PDFTableExtractor **](https://github.com/Degubi/PDFTableExtractor) with the developer's permission. The application extracts tables from PDF files and converts them into Excel (XLSX) format.
 
 ## Downloading & Installing
 
@@ -57,4 +57,4 @@ To bring up the settings menu, start the desktop icon normally.
 
 ---
 
-This C# port of the original PDFTableExtractor was created with the developer's permission.
+This C# port of the original [**PDFTableExtractor **](https://github.com/Degubi/PDFTableExtractor) was created with the developer's permission.
