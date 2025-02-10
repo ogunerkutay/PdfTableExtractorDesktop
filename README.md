@@ -19,7 +19,7 @@ For customizing output, check out the Settings wiki page.
 
 ## Example Input & Output
 
-![Example Input & Output](image2)
+![Example Input & Output](![Image](https://github.com/user-attachments/assets/454de69c-dee0-4dee-8cf1-f67821d813a4))
 
 ## Settings
 
