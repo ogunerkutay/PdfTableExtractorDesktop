@@ -57,4 +57,4 @@ To bring up the settings menu, start the desktop icon normally.
 
 ---
 
-This C# port of the original [**PDFTableExtractor **](https://github.com/Degubi/PDFTableExtractor) was created with the developer's permission.
+This C# port of the original [**PDFTableExtractor**](https://github.com/Degubi/PDFTableExtractor) was created with the developer's permission.
