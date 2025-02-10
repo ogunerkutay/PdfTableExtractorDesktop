@@ -32,7 +32,7 @@ To bring up the settings menu, start the desktop icon normally.
 - **Parallel file processing**: Enables processing multiple PDFs at the same time.
 - **Context menu**: When turned on, an extraction option appears in the right-click menu of PDF files.
 
-![Settings Screenshot](image2)
+![Image](https://github.com/user-attachments/assets/96a73a30-7188-4f45-8b08-be4006b9c91c)
 
 ## Updating
 
