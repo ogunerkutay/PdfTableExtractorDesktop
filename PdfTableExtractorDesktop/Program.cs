@@ -8,7 +8,7 @@ namespace PdfTableExtractorDesktop
 {
     public static class Program
     {
-        public const string VERSION = "1.3.1";
+        public const string VERSION = "1.0.0";
 
 
         private static readonly HttpClient httpClient = new() { Timeout = TimeSpan.FromSeconds(7) };
@@ -60,7 +60,7 @@ namespace PdfTableExtractorDesktop
             Form settingsForm = new()
             { 
                 Text = "PDF Table Extractor Settings",
-                Width = 800, Height = 1000,
+                Width = 650, Height = 650,
                 StartPosition = FormStartPosition.CenterScreen,
                 FormBorderStyle = FormBorderStyle.FixedDialog,
                 Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath),
@@ -69,7 +69,8 @@ namespace PdfTableExtractorDesktop
             };
 
             // Create settings panel
-            Panel settingsPanel = Components.CreateSettingsPanel();
+            Components components = new Components();
+            Panel settingsPanel = components.CreateSettingsPanel();
             settingsPanel.Location = new Point(10, 10);
             settingsPanel.Size = new Size(600, 600);
 

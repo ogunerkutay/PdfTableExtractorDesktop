@@ -2,19 +2,23 @@
 
 namespace PdfTableExtractorDesktop
 {
-    public static class Components
+    public class Components
     {
         private static string? cachedUserSelectedXlsDirectory = string.Empty;
+        private string ? customOutDir = string.Empty;
 
-        public static Panel CreateSettingsPanel()
+        public Panel CreateSettingsPanel()
         {
 
             var comparisonMethods = new[] { "less/equal", "equal", "greater/equal" };
             var oneThruTen = Enumerable.Range(1, 10).ToArray();
             var bigBoldFont = new Font(FontFamily.GenericSansSerif, 20, FontStyle.Bold);
-            var emptyColumnSkipGroup = new List<RadioButton>();
-            var emptyRowSkipGroup = new List<RadioButton>();
-            var panel = new Panel { Size = new Size(600, 1000) };
+            var emptyColumnSkipGroupList = new List<RadioButton>();
+            var emptyRowSkipGroupList = new List<RadioButton>();
+            var outputDirGroupList = new List<RadioButton>();
+
+            var panel = new Panel();
+            #region PageFilters
 
             AddSettingsSection("Page Filters", 10, panel, bigBoldFont);
             panel.Controls.Add(NewLabel(new Point(20, 50), "Keep pages with number of rows"));
@@ -32,12 +36,12 @@ namespace PdfTableExtractorDesktop
 
 
             panel.Controls.Add(NewLabel(new Point(20, 130), "Skip empty rows:"));
-            var emptyRowGroup = new GroupBox
+            var emptyRowSkipGroupControl = new GroupBox
             {
                 Location = new Point(255, 115),
                 Size = new Size(300, 30)
             };
-            panel.Controls.Add(emptyRowGroup);
+
             var emptyRowOptions = new[] { "None", "Leading", "Trailing", "Both" };
             var emptyRowPositions = new[] { new Point(0, 5), new Point(65, 5), new Point(150, 5), new Point(240, 5) };
             var emptyRowWidths = new[] { 60, 80, 80, 60 };
@@ -45,27 +49,32 @@ namespace PdfTableExtractorDesktop
             for (int i = 0; i < emptyRowOptions.Length; i++)
             {
                 var radio = NewRadioButton(emptyRowPositions[i], emptyRowWidths[i], emptyRowOptions[i], i, Settings.EmptyRowSkipMethod == i);
-                emptyRowSkipGroup.Add(radio);
-                emptyRowGroup.Controls.Add(radio);
+                emptyRowSkipGroupList.Add(radio);
+                emptyRowSkipGroupControl.Controls.Add(radio);
             }
+            panel.Controls.Add(emptyRowSkipGroupControl);
+
 
             panel.Controls.Add(NewLabel(new Point(20, 160), "Skip empty columns:"));
-            var emptyColumnGroup = new GroupBox
+            var emptyColumnSkipGroupControl = new GroupBox
             {
                 Location = new Point(255, 150),
                 Size = new Size(300, 30)
             };
-            panel.Controls.Add(emptyColumnGroup);
+
             var emptyColumnPositions = new[] { new Point(0, 5), new Point(65, 5), new Point(150, 5), new Point(240, 5) };
 
             for (int i = 0; i < emptyRowOptions.Length; i++)
             {
-                var radio = NewRadioButton(emptyColumnPositions[i], emptyRowWidths[i], emptyRowOptions[i], i,
-                    Settings.EmptyColumnSkipMethod == i);
-                emptyColumnSkipGroup.Add(radio);
-                emptyColumnGroup.Controls.Add(radio);
+                var radio = NewRadioButton(emptyColumnPositions[i], emptyRowWidths[i], emptyRowOptions[i], i, Settings.EmptyColumnSkipMethod == i);
+                emptyColumnSkipGroupList.Add(radio);
+                emptyColumnSkipGroupControl.Controls.Add(radio);
             }
+            panel.Controls.Add(emptyColumnSkipGroupControl);
 
+            #endregion
+
+            #region PageOutput
             AddSettingsSection("Page Output", 200, panel, bigBoldFont);
             panel.Controls.Add(NewLabel(new Point(20, 240), "Page naming strategy: "));
             var pageNamingMethods = new[] { "Counting", "PageOrdinal - TableOrdinal" };
@@ -73,37 +82,52 @@ namespace PdfTableExtractorDesktop
             panel.Controls.Add(pageNamingComboBox);
             var autosizeColumnsCheckBox = NewCheckBox(new Point(255, 280), "Autosize columns after extraction", Settings.AutosizeColumns);
             panel.Controls.Add(autosizeColumnsCheckBox);
+            #endregion
+
+            #region FileOutput
 
             AddSettingsSection("File Output", 320, panel, bigBoldFont);
             panel.Controls.Add(NewLabel(new Point(20, 360), "Output Path:"));
-            var outputPathGroup = new GroupBox
+            var customOutDirField = NewTextField(Settings.UserSelectedOutputDirectory, new Point(255, 360), 250);
+            panel.Controls.Add(customOutDirField);
+            var customOutDirChooserButton = NewButton("...", new Point(520, 355), 40, (s, e) =>
+            {
+                customOutDir = ShowDirectorySelection(customOutDirField.Text);
+                customOutDirField.Text = customOutDir;
+            });
+            panel.Controls.Add(customOutDirChooserButton);
+
+            var outputDirGroupControl = new GroupBox
             {
                 Location = new Point(20, 390),
                 Size = new Size(450, 30)
             };
-            panel.Controls.Add(outputPathGroup);
-            var outputDirectoryGroup = new List<RadioButton>();
-            var outDirPdfDirOption = NewRadioButton(new Point(0, 5), 150, "Input .pdf directory", 0, Settings.OutputDirectoryMethod == 0);
-            var outDirSelectOption = NewRadioButton(new Point(150, 5), 150, "Select before extraction", 1, Settings.OutputDirectoryMethod == 1);
-            var outDirCustomOption = NewRadioButton(new Point(300, 5), 150, "Predefined directory", 2, Settings.OutputDirectoryMethod == 2);
-            outputPathGroup.Controls.Add(outDirPdfDirOption);
-            outputPathGroup.Controls.Add(outDirSelectOption);
-            outputPathGroup.Controls.Add(outDirCustomOption);
 
-            var customOutDirField = NewTextField(Settings.UserSelectedOutputDirectory, new Point(255, 360), 250);
-            var customOutDirChooserButton = NewButton("...", new Point(520, 355), 40, (s, e) =>
+            var outputDirOptions = new[] { "Input .pdf directory", "Select before extraction", "Predefined directory" };
+            var outputDirPositions = new[] { new Point(0, 5), new Point(150, 5), new Point(300, 5) };
+            var outputDirWidths = new[] { 150, 150, 150 };
+
+            for (int i = 0; i < outputDirOptions.Length; i++)
             {
-                customOutDirField.Text = ShowDirectorySelection(customOutDirField.Text);
-            });
+                var radio = NewRadioButton(outputDirPositions[i], outputDirWidths[i], outputDirOptions[i], i, Settings.OutputDirectoryMethod == i);
 
-            outDirPdfDirOption.CheckedChanged += (s, e) => HandleOutDirOptionChange(false, customOutDirField, customOutDirChooserButton);
-            outDirSelectOption.CheckedChanged += (s, e) => HandleOutDirOptionChange(false, customOutDirField, customOutDirChooserButton);
-            outDirCustomOption.CheckedChanged += (s, e) => HandleOutDirOptionChange(true, customOutDirField, customOutDirChooserButton);
+                radio.CheckedChanged += (s, e) =>
+                {
+                    if (radio.Checked)
+                        HandleOutDirOptionChange((int)radio.Tag! == 2, customOutDirField, customOutDirChooserButton);
+                };
+
+                outputDirGroupList.Add(radio);
+                outputDirGroupControl.Controls.Add(radio);
+            }
+
+            panel.Controls.Add(outputDirGroupControl);
 
             HandleOutDirOptionChange(Settings.OutputDirectoryMethod == 2, customOutDirField, customOutDirChooserButton);
 
-            panel.Controls.Add(customOutDirField);
-            panel.Controls.Add(customOutDirChooserButton);
+            #endregion
+
+            #region AppSettings
 
             var parallelCheckBox = NewCheckBox(new Point(15, 470), "Enable parallel file processing", Settings.ParallelExtraction);
             var pdfContextMenuCheckBox = NewCheckBox(new Point(15, 500), "Enable PDF extraction context menu", Settings.ContextMenuOptionEnabled);
@@ -115,24 +139,14 @@ namespace PdfTableExtractorDesktop
             panel.Controls.Add(pdfContextMenuCheckBox);
             panel.Controls.Add(versionCheckingDisabledBox);
 
+            #endregion
+
+            #region AppExit
+
             Application.ApplicationExit += (s, e) =>
             {
-                var userSelectedDirectoryString = customOutDirField.Text;
-                //var userSelectedDirectoryMethod = -1;
-                //foreach (Control control in outputPathGroup.Controls)
-                //{
-                //    if (control is RadioButton radioButton && radioButton.Checked)
-                //    {
-                //        userSelectedDirectoryMethod = (int)radioButton.Tag!;
-                //        break;
-                //    }
-                //}
-
-                var userSelectedDirectoryMethod = outputPathGroup.Controls
-                                                                    .OfType<RadioButton>()
-                                                                    .ToList()
-                                                                    .FindIndex(radioButton => radioButton.Checked);
-
+                var userSelectedDirectoryString = customOutDir;
+                var userSelectedDirectoryMethod = outputDirGroupList.FindIndex(r => r.Checked);
                 var isUserDirectoryValid = !string.IsNullOrWhiteSpace(userSelectedDirectoryString) && Directory.Exists(userSelectedDirectoryString);
 
                 var settings = new JsonObject
@@ -144,8 +158,8 @@ namespace PdfTableExtractorDesktop
                     ["AutosizeColumns"] = autosizeColumnsCheckBox.Checked,
                     ["ParallelFileProcess"] = parallelCheckBox.Checked,
                     ["PageNamingMethod"] = Array.IndexOf(pageNamingMethods, (string)pageNamingComboBox.SelectedItem!),
-                    ["EmptyColumnSkipMethod"] = emptyColumnSkipGroup.FindIndex(r => r.Checked),
-                    ["EmptyRowSkipMethod"] = emptyRowSkipGroup.FindIndex(r => r.Checked),
+                    ["EmptyColumnSkipMethod"] = emptyColumnSkipGroupList.FindIndex(r => r.Checked),
+                    ["EmptyRowSkipMethod"] = emptyRowSkipGroupList.FindIndex(r => r.Checked),
                     ["OutputDirectoryMethod"] = userSelectedDirectoryMethod != 2 ? userSelectedDirectoryMethod : isUserDirectoryValid ? 2 : 0,
                     ["OutputDirectoryCustom"] = isUserDirectoryValid ? userSelectedDirectoryString : "",
                     ["VersionCheckingDisabled"] = versionCheckingDisabledBox.Checked,
@@ -154,6 +168,8 @@ namespace PdfTableExtractorDesktop
 
                 Settings.Save(settings, pdfContextMenuCheckBox.Checked);
             };
+
+            #endregion
 
             return panel;
         }
@@ -186,14 +202,6 @@ namespace PdfTableExtractorDesktop
 
         public static string ShowExcelDirectoryPicker(string rootDir)
         {
-            //try
-            //{
-            //    Application.SetHighDpiMode(HighDpiMode.SystemAware);
-            //    Application.EnableVisualStyles();
-            //    Application.SetCompatibleTextRenderingDefault(false);
-            //}
-            //catch (Exception) { }
-
             if (string.IsNullOrEmpty(cachedUserSelectedXlsDirectory))
             {
                 cachedUserSelectedXlsDirectory = ShowDirectorySelection(rootDir);
