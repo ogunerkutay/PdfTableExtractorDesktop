@@ -200,7 +200,7 @@ namespace PdfTableExtractorDesktop
                 return $"Local app version: {VERSION}, version checking was disabled in config";
             }
 
-            const string apiUrl = "https://api.github.com/repos/Degubi/PDFTableExtractor/releases/latest";
+            const string apiUrl = "https://api.github.com/repos/ogunerkutay/PdfTableExtractorDesktop/releases/latest";
             httpClient.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("Mozilla", "5.0"));
 
             try
